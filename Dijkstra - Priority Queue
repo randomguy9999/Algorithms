@@ -1,0 +1,30 @@
+class Solution {
+    public: 
+
+    vector<int> dijkstraPriorityQueue (int V, vector<vector<int>> adj[], int S) {
+        // {distance, node}
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0, S});
+
+        vector<int> dist(V,1e9);
+        dist[S] = 0;
+
+        while(!pq.empty()) {
+            int dis = pq.top().first;
+            int node = pq.top().second;
+            pq.pop();
+
+            for(auto it: adj[node]) {
+                int destDist = it[1];
+                int destNode = it[0];
+
+                if(destDist + dis < dist[destNode]) {
+                    dist[destNode] = destDist + dis;
+                    pq.push({dist[destNode], destNode});
+                }
+            }
+        }
+
+        return dist;
+    }
+};
