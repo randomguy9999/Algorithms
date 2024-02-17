@@ -1,0 +1,38 @@
+
+class Solution {
+    public: 
+
+    vector<int> dijkstra (int V, vector<vector<int>> adj[], int S) {
+        // {distance, node}
+        set<pair<int, int>> st;
+        st.insert({0, S});
+
+        vector<int> dist(V,1e9); // INT_MAX
+        dist[S] = 0;
+
+        while(!st.empty()) {
+            auto itr = *(st.begin());
+            int dis = itr.first;
+            int node = itr.second;
+            st.erase(itr);
+
+            for(auto it: adj[node]) {
+                int destDist = it[1];
+                int destNode = it[0];
+
+                if(destDist + dis < dist[destNode]) {
+                    // if this node is not INT_MAX that means it was previously visited so we can remove that item from set
+                    // Using set to remove items only
+                    if(dist[destNode] != 1e9) {
+                        st.erase({dist[destNode], destNode});
+                    }
+
+                    dist[destNode] = destDist + dis;
+                    st.insert({dist[destNode], destNode});
+                }
+            }
+        }
+
+        return dist;
+    }
+};
